@@ -1,0 +1,17 @@
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+import { useTheme } from '../hooks/useTheme';
+
+export default function Layout() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-cses-dark text-gray-900 dark:text-cses-text transition-colors duration-300 font-sans">
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Outlet />
+      </main>
+    </div>
+  );
+}
