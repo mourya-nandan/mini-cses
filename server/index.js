@@ -66,7 +66,7 @@ app.post('/api/submit', async (req, res) => {
     const sourcePath = path.join(__dirname, 'temp', `sub_${uniqueId}.cpp`);
     const execPath = path.join(__dirname, 'temp', `sub_${uniqueId}`);
     
-    console.log(testCases);
+    //console.log(testCases);
 
     // 2. Write File
     fs.writeFileSync(sourcePath, code);
@@ -102,7 +102,7 @@ app.post('/api/submit', async (req, res) => {
         }
       }
 
-      //cleanup(sourcePath, execPath);
+      cleanup(sourcePath, execPath);
       res.json({ 
         status: allPassed ? "Accepted" : "Wrong Answer", 
         results 
