@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import ProblemSet from './pages/ProblemSet';
 import ProblemDetail from './pages/ProblemDetail';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="problems" element={<ProblemSet />} />
           <Route path="problems/:id" element={<ProblemDetail />} />
+          <Route path="login" element={<Login />} />
           {/* Fallback for now */}
           <Route path="*" element={<Home />} />
         </Route>

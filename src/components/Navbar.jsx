@@ -21,8 +21,8 @@ export default function Navbar({ theme, toggleTheme }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Code2 className="h-8 w-8 text-blue-600 dark:text-blue-500" />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">Mini-CSES</span>
+            {/*<Code2 className="h-8 w-8 text-blue-600 dark:text-blue-500" />*/}
+            <span className="text-xl font-bold text-gray-900 dark:text-blue-500">Tharka</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -49,6 +49,14 @@ export default function Navbar({ theme, toggleTheme }) {
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
+
+            {/* Login Button */}
+            <Link
+              to="/login"
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors shadow-sm shadow-blue-500/30"
+            >
+              Login
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -87,6 +95,13 @@ export default function Navbar({ theme, toggleTheme }) {
                 {link.name}
               </Link>
             ))}
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+            >
+              Login
+            </Link>
           </div>
         </div>
       )}

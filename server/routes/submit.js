@@ -19,11 +19,13 @@ router.post('/', async (req, res) => {
   let execPath = null;
 
   try {
-    // 1. Fetch Test Cases (Mongoose)
+    // 1. Fetch Problem (Mongoose)
     const problem = await Problem.findOne({ id: problemId });
     if (!problem) return res.status(404).json({ error: "Problem not found" });
 
-    const testCases = problem.testCases;
+    // Use hiddenTestCases for actual evaluation
+    const testCases = problem.hiddenTestCases;
+    const timeLimit = problem.timeLimit || 1000;
     const uniqueId = Date.now();
     
     // Ensure temp directory exists
@@ -50,20 +52,26 @@ router.post('/', async (req, res) => {
     let allPassed = true;
     let results = [];
 
-    for (const tc of testCases) {
+    for (let i = 0; i < testCases.length; i++) {
+      const tc = testCases[i];
       try {
-        const userOutput = await runTestCase(execPath, tc.input);
+        const userOutput = await runTestCase(execPath, tc.input, timeLimit);
         const passed = userOutput.trim() === tc.output.trim();
+        
+        // Return only status per test case to avoid leaking hidden data
         results.push({ 
-          input: tc.input, 
-          expected: tc.output, 
-          actual: userOutput, 
+          testCase: i + 1,
           passed 
         });
+        
         if (!passed) allPassed = false;
       } catch (e) {
         allPassed = false;
-        results.push({ input: tc.input, passed: false, error: "Runtime Error" });
+        results.push({ 
+          testCase: i + 1, 
+          passed: false, 
+          error: e.message === "Time Limit Exceeded" ? "TLE" : "Runtime Error" 
+        });
       }
     }
 
@@ -83,17 +91,17 @@ router.post('/', async (req, res) => {
 });
 
 // Helper: Run Single Test Case
-function runTestCase(execPath, input) {
+function runTestCase(execPath, input, timeLimit) {
   return new Promise((resolve, reject) => {
     const child = spawn(execPath);
     let output = '';
     let error = '';
 
-    // Timeout (1 second)
+    // Dynamic Timeout
     const timeout = setTimeout(() => {
       child.kill();
       reject(new Error("Time Limit Exceeded"));
-    }, 1000);
+    }, timeLimit);
 
     child.stdin.write(input);
     child.stdin.end();
