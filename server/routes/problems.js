@@ -1,37 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const Problem = require('../models/Problem');
 
 // Endpoint: Get All Problems
-router.get('/', (req, res) => {
-  db.all("SELECT id, title FROM problems", [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
-  });
+router.get('/', async (req, res) => {
+  try {
+    const problems = await Problem.find({}, 'id title');
+    res.json(problems);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Endpoint: Get Problem Details
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  db.get("SELECT id, title, description, test_cases FROM problems WHERE id = ?", [id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: "Problem not found" });
-    
+  try {
+    const problem = await Problem.findOne({ id: parseInt(id) });
+    if (!problem) return res.status(404).json({ error: "Problem not found" });
+
     // Extract Public Examples (First 3 test cases)
-    let examples = [];
-    try {
-      examples = JSON.parse(row.test_cases || '[]').slice(0, 3);
-    } catch (e) {
-      console.error("Failed to parse test cases for examples");
-    }
+    // In Mongo, testCases is already an array, so no JSON.parse needed!
+    const examples = problem.testCases.slice(0, 3);
 
     res.json({
-      id: row.id,
-      title: row.title,
-      description: row.description,
+      id: problem.id,
+      title: problem.title,
+      description: problem.description,
       examples: examples 
     });
-  });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;

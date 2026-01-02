@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec, spawn } = require('child_process');
 const util = require('util');
-const db = require('../db');
+const Problem = require('../models/Problem');
 
 // Promisify exec to use with await
 const execPromise = util.promisify(exec);
@@ -15,22 +15,15 @@ router.post('/', async (req, res) => {
   
   if (!code) return res.status(400).json({ error: "No code provided" });
 
-  // 1. Fetch Test Cases (Promise Wrapper for DB)
-  const getProblem = () => new Promise((resolve, reject) => {
-    db.get("SELECT test_cases FROM problems WHERE id = ?", [problemId], (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-
   let sourcePath = null;
   let execPath = null;
 
   try {
-    const row = await getProblem();
-    if (!row) return res.status(404).json({ error: "Problem not found" });
+    // 1. Fetch Test Cases (Mongoose)
+    const problem = await Problem.findOne({ id: problemId });
+    if (!problem) return res.status(404).json({ error: "Problem not found" });
 
-    const testCases = JSON.parse(row.test_cases);
+    const testCases = problem.testCases;
     const uniqueId = Date.now();
     
     // Ensure temp directory exists

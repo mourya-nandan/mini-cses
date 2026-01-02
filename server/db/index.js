@@ -1,11 +1,13 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const mongoose = require('mongoose');
 
-const dbPath = path.resolve(__dirname, 'problems.db');
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/minicses');
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+};
 
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) console.error('DB Connection Error:', err);
-  else console.log('Connected to SQLite DB');
-});
-
-module.exports = db;
+module.exports = connectDB;
