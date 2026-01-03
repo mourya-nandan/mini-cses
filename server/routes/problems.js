@@ -53,6 +53,7 @@ router.get('/:id', async (req, res) => {
       description: problem.description,
       inputFormat: problem.inputFormat,
       outputFormat: problem.outputFormat,
+      constraints: problem.constraints,
       timeLimit: problem.timeLimit,
       memoryLimit: problem.memoryLimit,
       examples: problem.sampleTestCases 

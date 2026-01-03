@@ -17,14 +17,56 @@ import {
   Hexagon,
   Rocket,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Trophy,
+  Target
 } from 'lucide-react';
 import config from '../config';
+
+const ProblemStats = ({ solved, total }) => {
+  const percentage = total > 0 ? Math.round((solved / total) * 100) : 0;
+  
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-5 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+          <Target className="h-4 w-4 text-blue-500" />
+          Progress
+        </h3>
+        <Trophy className="h-4 w-4 text-amber-500" />
+      </div>
+      
+      <div className="space-y-2">
+        <div className="flex items-end justify-between">
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-white">
+            {solved}
+          </div>
+          <div className="text-sm font-medium text-slate-500 dark:text-slate-400 pb-1">
+            of {total} solved
+          </div>
+        </div>
+        
+        <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-200/50 dark:border-slate-700/50">
+          <div 
+            className="bg-gradient-to-r from-blue-600 to-indigo-500 h-full rounded-full transition-all duration-1000 ease-out"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        
+        <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-tighter">
+          <span className="text-slate-400">{percentage}% COMPLETE</span>
+          <span className="text-blue-500 dark:text-blue-400">{total - solved} REMAINING</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function ProblemSet() {
   const navigate = useNavigate();
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [solvedCount, setSolvedCount] = useState(0); // Mocked for now
   
   // Filter States
   const [search, setSearch] = useState(''); 
@@ -64,10 +106,6 @@ export default function ProblemSet() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  useEffect(() => {
-    fetchProblems();
-  }, [page, debouncedSearch, category, difficulty]);
-
   const fetchProblems = () => {
     setLoading(true);
     const params = new URLSearchParams({
@@ -92,6 +130,10 @@ export default function ProblemSet() {
       });
   };
 
+  useEffect(() => {
+    fetchProblems();
+  }, [page, debouncedSearch, category, difficulty]);
+
   const handleCategoryClick = (e, catId) => {
     e.preventDefault();
     setCategory(catId === category ? '' : catId); 
@@ -112,9 +154,11 @@ export default function ProblemSet() {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Tharka Problem Set</h1>
-          <p className="text-lg text-slate-500 dark:text-slate-400 mt-2">
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+            Tharka Problem Set
+          </h1>
+          <p className="max-w-2xl mx-auto text-xl text-slate-500 dark:text-slate-400 mt-4">
             Curated algorithmic challenges for competitive programming mastery.
           </p>
         </div>
@@ -123,6 +167,8 @@ export default function ProblemSet() {
           
           {/* Sidebar Navigation */}
           <aside className="lg:w-72 flex-shrink-0 space-y-6">
+            <ProblemStats solved={solvedCount} total={totalProblemsCount} />
+            
             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden sticky top-24 p-4">
               <h3 className="text-xl font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 px-2">
                 Categories
@@ -176,19 +222,19 @@ export default function ProblemSet() {
                       placeholder="Search..." 
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950 rounded-lg text-sm border border-transparent focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/10 placeholder-slate-400 dark:text-white transition-all"
+                      className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-950 rounded-lg text-sm border border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-blue-200 dark:focus:border-blue-800 focus:ring-4 focus:ring-blue-500/10 placeholder-slate-400 dark:text-white transition-all"
                     />
                  </div>
                  <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-1"></div>
                  <select
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value)}
-                    className="bg-transparent text-sm font-medium text-slate-600 dark:text-slate-300 border-0 focus:ring-0 cursor-pointer pr-8"
+                    className="bg-transparent dark:bg-slate-900 text-sm font-medium text-slate-600 dark:text-slate-300 border-0 focus:ring-0 cursor-pointer pr-8"
                   >
-                    <option value="">Difficulty</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
+                    <option value="" className="dark:bg-slate-900">Difficulty</option>
+                    <option value="easy" className="dark:bg-slate-900">Easy</option>
+                    <option value="medium" className="dark:bg-slate-900">Medium</option>
+                    <option value="hard" className="dark:bg-slate-900">Hard</option>
                   </select>
                </div>
             </div>

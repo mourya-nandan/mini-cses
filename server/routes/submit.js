@@ -11,7 +11,7 @@ const execPromise = util.promisify(exec);
 
 // Endpoint: Submit Solution
 router.post('/', async (req, res) => {
-  const { problemId, code } = req.body;
+  const { problemId, code, mode } = req.body;
   
   if (!code) return res.status(400).json({ error: "No code provided" });
 
@@ -23,8 +23,16 @@ router.post('/', async (req, res) => {
     const problem = await Problem.findOne({ id: problemId });
     if (!problem) return res.status(404).json({ error: "Problem not found" });
 
-    // Use hiddenTestCases for actual evaluation
-    const testCases = problem.hiddenTestCases;
+    // Determine test cases based on mode ("run" = sample, default = hidden)
+    const testCases = (mode === 'run') ? problem.sampleTestCases : problem.hiddenTestCases;
+    
+    if (!testCases || testCases.length === 0) {
+        return res.json({ 
+            status: "Error", 
+            message: "No test cases found for this mode." 
+        });
+    }
+
     const timeLimit = problem.timeLimit || 1000;
     const uniqueId = Date.now();
     

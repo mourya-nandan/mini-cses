@@ -18,16 +18,43 @@ import {
   MessageSquare, 
   History,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  Copy,
+  Check
 } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import config from '../config';
+
+const CopyButton = ({ text }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  return (
+    <button 
+      onClick={handleCopy} 
+      className="p-1 hover:bg-[#444] rounded text-gray-400 hover:text-white transition-colors ml-2"
+      title="Copy to clipboard"
+    >
+      {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+    </button>
+  );
+};
 
 export default function ProblemDetail() {
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [running, setRunning] = useState(false);
   const [code, setCode] = useState('');
   const [result, setResult] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
@@ -74,7 +101,28 @@ int main() {
         console.error("Failed to fetch problem", err);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, defaultCode]);
+
+  const handleRun = async () => {
+    setRunning(true);
+    setResult(null);
+    setConsoleOpen(true);
+    setActiveConsoleTab('result');
+
+    try {
+      const res = await fetch(`${config.API_URL}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ problemId: id, code, mode: 'run' })
+      });
+      const data = await res.json();
+      setResult(data);
+    } catch {
+      setResult({ status: "Error", message: "Failed to connect to server." });
+    } finally {
+      setRunning(false);
+    }
+  };
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -90,7 +138,7 @@ int main() {
       });
       const data = await res.json();
       setResult(data);
-    } catch (err) {
+    } catch {
       setResult({ status: "Error", message: "Failed to connect to server." });
     } finally {
       setSubmitting(false);
@@ -116,16 +164,6 @@ int main() {
       window.removeEventListener('mouseup', stopResizing);
     };
   }, [resize, stopResizing]);
-
-  const getDifficultyColor = (diff) => {
-    if (!diff) return 'text-gray-500';
-    switch(diff.toLowerCase()) {
-        case 'easy': return 'text-emerald-500';
-        case 'medium': return 'text-amber-500';
-        case 'hard': return 'text-rose-500';
-        default: return 'text-gray-500';
-    }
-  };
 
   if (loading) {
     return <div className="flex h-full items-center justify-center bg-[#1a1a1a] text-gray-400"><Loader2 className="animate-spin h-8 w-8" /></div>;
@@ -154,14 +192,15 @@ int main() {
 
          <div className="flex items-center gap-2">
             <button 
-                onClick={() => { setConsoleOpen(true); setActiveConsoleTab('testcase'); }}
-                className="flex items-center gap-2 px-4 py-1.5 bg-[#333] hover:bg-[#444] text-gray-300 rounded text-sm font-medium transition-colors"
+                onClick={handleRun}
+                disabled={running || submitting}
+                className="flex items-center gap-2 px-4 py-1.5 bg-[#333] hover:bg-[#444] text-gray-300 rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                <Play className="h-3 w-3" /> Run
+                {running ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />} Run
             </button>
             <button 
                 onClick={handleSubmit}
-                disabled={submitting}
+                disabled={submitting || running}
                 className="flex items-center gap-2 px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Code2 className="h-3 w-3" />}
@@ -227,14 +266,29 @@ int main() {
                           </div>
                       </div>
 
+                      {/* Note */}
+                      {problem?.constraints && (
+                          <div className="space-y-2 pt-4">
+                             <h3 className="text-base font-bold text-white uppercase tracking-wide">Constraints</h3>
+                             <div className="text-sm text-gray-300 font-sans">
+                                {problem.constraints}
+                             </div>
+                          </div>
+                      )}
                       {/* Examples */}
                       <div className="space-y-4">
                           <h3 className="text-base font-bold text-white uppercase tracking-wide">Examples</h3>
                           {problem?.examples?.map((ex, idx) => (
                               <div key={idx} className="border border-[#444] rounded-sm overflow-hidden">
                                   <div className="flex border-b border-[#444] bg-[#333]">
-                                      <div className="flex-1 p-1 px-3 text-xs font-bold text-white">input</div>
-                                      <div className="flex-1 p-1 px-3 text-xs font-bold text-white border-l border-[#444]">output</div>
+                                      <div className="flex-1 p-1 px-3 text-xs font-bold text-white flex items-center justify-between">
+                                          <span>input</span>
+                                          <CopyButton text={ex.input} />
+                                      </div>
+                                      <div className="flex-1 p-1 px-3 text-xs font-bold text-white border-l border-[#444] flex items-center justify-between">
+                                          <span>output</span>
+                                          <CopyButton text={ex.output} />
+                                      </div>
                                   </div>
                                   <div className="flex bg-[#262626]">
                                       <div className="flex-1 p-2 font-mono text-sm text-white whitespace-pre-wrap border-r border-[#444]">
@@ -247,16 +301,6 @@ int main() {
                               </div>
                           ))}
                       </div>
-
-                      {/* Note */}
-                      {problem?.constraints && (
-                          <div className="space-y-2 pt-4">
-                             <h3 className="text-base font-bold text-white uppercase tracking-wide">Note</h3>
-                             <div className="text-sm text-gray-300 font-sans">
-                                {problem.constraints}
-                             </div>
-                          </div>
-                      )}
                   </div>
               )}
               {activeTab === 'submissions' && (
@@ -358,18 +402,18 @@ int main() {
 
                         {activeConsoleTab === 'result' && (
                             <div className="h-full">
-                                {!result && !submitting && (
+                                {!result && !submitting && !running && (
                                     <div className="h-full flex flex-col items-center justify-center text-gray-500 text-sm">
                                         <p>Run your code to see results</p>
                                     </div>
                                 )}
-                                {submitting && (
+                                {(submitting || running) && (
                                     <div className="h-full flex flex-col items-center justify-center text-gray-400">
                                         <Loader2 className="h-6 w-6 animate-spin mb-2" />
-                                        <span className="text-xs">Running Code...</span>
+                                        <span className="text-xs">{submitting ? "Submitting..." : "Running Code..."}</span>
                                     </div>
                                 )}
-                                {result && (
+                                {result && !submitting && !running && (
                                     <div className="space-y-4">
                                         <div className={`text-lg font-bold ${
                                             result.status === 'Accepted' ? 'text-green-500' : 
