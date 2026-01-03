@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Problem = require('../models/Problem');
 
-// Endpoint: Get All Problems (with Pagination & Filtering)
 router.get('/', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -13,27 +12,20 @@ router.get('/', async (req, res) => {
 
     const query = {};
 
-    // 1. Text Search (Case-insensitive regex on title)
     if (search) {
       query.title = { $regex: search, $options: 'i' };
     }
 
-    // 2. Category Filter
     if (category) {
       query.category = category;
     }
 
-    // 3. Difficulty Filter
     if (difficulty) {
       query.difficulty = difficulty;
     }
 
-    // Execute Query with Pagination
     const total = await Problem.countDocuments(query);
-    const problems = await Problem.find(query, 'id title category difficulty')
-      .sort({ id: 1 })
-      .skip((page - 1) * limit)
-      .limit(limit);
+    const problems = await Problem.find(query, 'id title category difficulty').sort({ id: 1 }).skip((page - 1) * limit).limit(limit);
 
     res.json({
       problems,
@@ -49,7 +41,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Endpoint: Get Problem Details
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
