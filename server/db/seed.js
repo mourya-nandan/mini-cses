@@ -7,7 +7,9 @@ const sourceData = [
   {
     "id": 201,
     "title": "Sum of Two Numbers",
-    "description": "Given two integers A and B, print their sum.",
+    "description": "Your task is to calculate the sum of two given integers.",
+    "inputFormat": "The input consists of a single line containing two space-separated integers A and B.",
+    "outputFormat": "Print the sum of A and B on a single line.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -29,7 +31,9 @@ const sourceData = [
   {
     "id": 202,
     "title": "Difference of Two Numbers",
-    "description": "Given two integers A and B, print A minus B.",
+    "description": "Your task is to calculate the difference between two given integers.",
+    "inputFormat": "The input consists of a single line containing two space-separated integers A and B.",
+    "outputFormat": "Print the result of A - B on a single line.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -51,7 +55,9 @@ const sourceData = [
   {
     "id": 203,
     "title": "Product of Two Numbers",
-    "description": "Given two integers A and B, print their product.",
+    "description": "Your task is to calculate the product of two given integers.",
+    "inputFormat": "The input consists of a single line containing two space-separated integers A and B.",
+    "outputFormat": "Print the product of A and B on a single line.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -73,7 +79,9 @@ const sourceData = [
   {
     "id": 204,
     "title": "Maximum of Two Numbers",
-    "description": "Given two integers A and B, print the maximum.",
+    "description": "Your task is to find the larger of two given integers.",
+    "inputFormat": "The input consists of a single line containing two space-separated integers A and B.",
+    "outputFormat": "Print the maximum of the two integers.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -95,7 +103,9 @@ const sourceData = [
   {
     "id": 205,
     "title": "Minimum of Two Numbers",
-    "description": "Given two integers A and B, print the minimum.",
+    "description": "Your task is to find the smaller of two given integers.",
+    "inputFormat": "The input consists of a single line containing two space-separated integers A and B.",
+    "outputFormat": "Print the minimum of the two integers.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -117,7 +127,9 @@ const sourceData = [
   {
     "id": 206,
     "title": "Even or Odd",
-    "description": "Given an integer N, determine whether it is even or odd.",
+    "description": "Your task is to determine whether a given integer is even or odd.",
+    "inputFormat": "The input consists of a single line containing an integer N.",
+    "outputFormat": "Print 'EVEN' if the number is even, and 'ODD' if the number is odd.",
     "category": "introductory",
     "difficulty": "easy",
     "constraints": {
@@ -139,7 +151,9 @@ const sourceData = [
   {
     "id": 207,
     "title": "Sum of First N Numbers",
-    "description": "Given an integer N, print the sum of the first N natural numbers.",
+    "description": "Your task is to calculate the sum of the first N positive integers (1 + 2 + ... + N).",
+    "inputFormat": "The input consists of a single line containing an integer N.",
+    "outputFormat": "Print the sum of the first N integers.",
     "category": "introductory",
     "difficulty": "medium",
     "constraints": {
@@ -161,7 +175,9 @@ const sourceData = [
   {
     "id": 208,
     "title": "Factorial of a Number",
-    "description": "Given an integer N, compute its factorial.",
+    "description": "Your task is to calculate the factorial of a given integer N.",
+    "inputFormat": "The input consists of a single line containing an integer N.",
+    "outputFormat": "Print the factorial of N.",
     "category": "introductory",
     "difficulty": "medium",
     "constraints": {
@@ -183,7 +199,9 @@ const sourceData = [
   {
     "id": 209,
     "title": "Count Digits",
-    "description": "Given an integer N, count the number of digits in it.",
+    "description": "Your task is to count the number of digits in a given non-negative integer N.",
+    "inputFormat": "The input consists of a single line containing an integer N.",
+    "outputFormat": "Print the number of digits in N.",
     "category": "introductory",
     "difficulty": "medium",
     "constraints": {
@@ -205,7 +223,9 @@ const sourceData = [
   {
     "id": 210,
     "title": "Check Prime Number",
-    "description": "Determine whether the given number is prime.",
+    "description": "Your task is to determine whether a given positive integer N is a prime number.",
+    "inputFormat": "The input consists of a single line containing an integer N.",
+    "outputFormat": "Print 'YES' if N is prime, and 'NO' otherwise.",
     "category": "introductory",
     "difficulty": "medium",
     "constraints": {
@@ -229,7 +249,9 @@ const sourceData = [
   {
     "id": 301,
     "title": "Climbing Stairs",
-    "description": "You are climbing a staircase. It takes N steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top? (Print answer modulo 10^9+7)",
+    "description": "You are climbing a staircase. It takes N steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "inputFormat": "The input consists of a single integer N.",
+    "outputFormat": "Print the number of ways modulo 10^9+7.",
     "category": "dynamic programming",
     "difficulty": "easy",
     "constraints": {
@@ -251,7 +273,9 @@ const sourceData = [
   {
     "id": 302,
     "title": "Coin Change I",
-    "description": "Given a set of coin values and a target sum, find the number of distinct ways to make the sum. You can use each coin any number of times. Print answer modulo 10^9+7.\nInput: N (number of coins), X (target), then N integers.\nOutput: Number of ways.",
+    "description": "Given a set of coin values and a target sum, your task is to find the number of distinct ways to make the sum. You can use each coin any number of times.",
+    "inputFormat": "The first line contains two integers N and X: the number of coins and the target sum.\nThe second line contains N integers c_1, c_2, ..., c_N: the values of each coin.",
+    "outputFormat": "Print the number of ways modulo 10^9+7.",
     "category": "dynamic programming",
     "difficulty": "medium",
     "constraints": {
@@ -273,7 +297,9 @@ const sourceData = [
   {
     "id": 303,
     "title": "Longest Increasing Subsequence",
-    "description": "Given an array of N integers, find the length of the longest strictly increasing subsequence.\nInput: N, then N integers.\nOutput: Length of LIS.",
+    "description": "Given an array of N integers, find the length of the longest strictly increasing subsequence.",
+    "inputFormat": "The first line contains an integer N.\nThe second line contains N integers representing the array.",
+    "outputFormat": "Print a single integer: the length of the longest increasing subsequence.",
     "category": "dynamic programming",
     "difficulty": "medium",
     "constraints": {
@@ -295,7 +321,9 @@ const sourceData = [
   {
     "id": 304,
     "title": "Minimizing Coins",
-    "description": "Consider a money system consisting of N coins. Each coin has a positive integer value. Your task is to produce a sum of money X using the available coins in such a way that the number of coins is minimal.\nInput: N X, then N integers.\nOutput: Min coins or -1.",
+    "description": "Consider a money system consisting of N coins. Each coin has a positive integer value. Your task is to produce a sum of money X using the available coins in such a way that the number of coins is minimal.",
+    "inputFormat": "The first line contains two integers N and X: the number of coins and the target sum.\nThe second line contains N integers c_1, c_2, ..., c_N: the values of each coin.",
+    "outputFormat": "Print the minimum number of coins. If it is not possible to produce the sum, print -1.",
     "category": "dynamic programming",
     "difficulty": "medium",
     "constraints": {
@@ -317,7 +345,9 @@ const sourceData = [
   {
     "id": 305,
     "title": "Grid Paths",
-    "description": "Consider an N x N grid whose squares may have traps. It is not allowed to move to a square with a trap. Your task is to calculate the number of paths from the upper-left square to the lower-right square. You can only move right or down.\nInput: N, then N lines of grid (. is free, * is trap).\nOutput: Number of paths mod 10^9+7.",
+    "description": "Consider an N x N grid whose squares may have traps. It is not allowed to move to a square with a trap. Your task is to calculate the number of paths from the upper-left square to the lower-right square. You can only move right or down.",
+    "inputFormat": "The first line contains an integer N: the size of the grid.\nThe following N lines describe the grid. Each line has N characters: . denotes an empty cell, and * denotes a trap.",
+    "outputFormat": "Print the number of paths modulo 10^9+7.",
     "category": "dynamic programming",
     "difficulty": "medium",
     "constraints": {
@@ -341,7 +371,9 @@ const sourceData = [
   {
     "id": 401,
     "title": "Counting Rooms",
-    "description": "You are given a map of a building, and your task is to count the number of its rooms. The size of the map is N x M squares, and each square is either floor (.) or wall (#). You can walk left, right, up, and down through the floor squares.\nInput: N M, then grid.\nOutput: Number of rooms.",
+    "description": "You are given a map of a building, and your task is to count the number of its rooms. The size of the map is N x M squares, and each square is either floor (.) or wall (#). You can walk left, right, up, and down through the floor squares.",
+    "inputFormat": "The first line contains two integers N and M: the height and width of the map.\nThen there are N lines of M characters describing the map.",
+    "outputFormat": "Print one integer: the number of rooms.",
     "category": "graph",
     "difficulty": "medium",
     "constraints": {
@@ -363,7 +395,9 @@ const sourceData = [
   {
     "id": 402,
     "title": "Labyrinth",
-    "description": "You are given a map of a labyrinth, and your task is to find a path from start (A) to end (B). You can walk left, right, up, and down.\nInput: N M, then grid.\nOutput: 'YES' and length of path, or 'NO'. (Just print YES/NO for simplicity here).",
+    "description": "You are given a map of a labyrinth, and your task is to find a path from start (A) to end (B). You can walk left, right, up, and down.",
+    "inputFormat": "The first line contains two integers N and M: the height and width of the map.\nThen there are N lines of M characters describing the map.",
+    "outputFormat": "Print 'YES' if a path exists, and 'NO' otherwise.",
     "category": "graph",
     "difficulty": "medium",
     "constraints": {
@@ -385,7 +419,9 @@ const sourceData = [
   {
     "id": 403,
     "title": "Building Roads",
-    "description": "Byteland has N cities and M roads between them. The goal is to make all cities reachable from each other. Your task is to find the minimum number of new roads required.\nInput: N M, then M edges.\nOutput: Number of new roads required.",
+    "description": "Byteland has N cities and M roads between them. The goal is to make all cities reachable from each other. Your task is to find the minimum number of new roads required.",
+    "inputFormat": "The first line contains two integers N and M: the number of cities and roads. The cities are numbered 1, ..., N.\nThen there are M lines describing the roads. Each line has two integers a and b: there is a road between those cities.",
+    "outputFormat": "Print one integer: the number of new roads required.",
     "category": "graph",
     "difficulty": "medium",
     "constraints": {
@@ -407,7 +443,9 @@ const sourceData = [
   {
     "id": 404,
     "title": "Message Route",
-    "description": "Syrjälä's network consists of N computers and M connections. Your task is to find if Uolevi can send a message to Maija, and if so, what is the minimum number of computers on such a route.\nInput: N M, then M connections (from 1 to N).\nOutput: Minimum length of route (number of nodes), or IMPOSSIBLE.",
+    "description": "Syrjälä's network consists of N computers and M connections. Your task is to find if Uolevi can send a message to Maija, and if so, what is the minimum number of computers on such a route.",
+    "inputFormat": "The first line contains two integers N and M: the number of computers and connections.\nThen there are M lines describing the connections.",
+    "outputFormat": "Print the minimum number of computers on a valid route. If there is no route, print IMPOSSIBLE.",
     "category": "graph",
     "difficulty": "medium",
     "constraints": {
@@ -429,7 +467,9 @@ const sourceData = [
   {
     "id": 405,
     "title": "Building Teams",
-    "description": "There are N pupils in Uolevi's class, and M friendships between them. Your task is to divide the pupils into two teams in such a way that no two pupils in a team are friends. (Bipartite Check)\nInput: N M, then M edges.\nOutput: 'POSSIBLE' or 'IMPOSSIBLE' (Simplified output).",
+    "description": "There are N pupils in Uolevi's class, and M friendships between them. Your task is to divide the pupils into two teams in such a way that no two pupils in a team are friends.",
+    "inputFormat": "The first line contains two integers N and M: the number of pupils and friendships.\nThen there are M lines describing the friendships.",
+    "outputFormat": "Print 'POSSIBLE' if a valid division exists, and 'IMPOSSIBLE' otherwise.",
     "category": "graph",
     "difficulty": "medium",
     "constraints": {
@@ -463,10 +503,10 @@ const seedDB = async () => {
     category: p.category,
     difficulty: p.difficulty,
     constraints: p.constraints.inputConstraints || "See description",
-    inputFormat: "See description",
-    outputFormat: "See description",
-    timeLimit: p.constraints.timeLimit,
-    memoryLimit: p.constraints.memoryLimit,
+    inputFormat: p.inputFormat || "See description",
+    outputFormat: p.outputFormat || "See description",
+    timeLimit: p.constraints.timeLimit || p.timeLimit,
+    memoryLimit: p.constraints.memoryLimit || p.memoryLimit,
     sampleTestCases: p.testCases,
     hiddenTestCases: p.hiddenTestCases || []
   }));

@@ -113,7 +113,7 @@ export default function ProblemSet() {
         
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Problem Set</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Tharka Problem Set</h1>
           <p className="text-lg text-slate-500 dark:text-slate-400 mt-2">
             Curated algorithmic challenges for competitive programming mastery.
           </p>
@@ -124,7 +124,7 @@ export default function ProblemSet() {
           {/* Sidebar Navigation */}
           <aside className="lg:w-72 flex-shrink-0 space-y-6">
             <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden sticky top-24 p-4">
-              <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 px-2">
+              <h3 className="text-xl font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 px-2">
                 Categories
               </h3>
               <nav className="space-y-1">
@@ -132,14 +132,14 @@ export default function ProblemSet() {
                   <button
                     key={cat.id}
                     onClick={(e) => handleCategoryClick(e, cat.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-all duration-200 group ${
+                    className={`w-full flex items-center gap-3 px-3 py-3 text-base font-medium rounded-lg transition-all duration-200 group ${
                       category === cat.id 
                         ? 'bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700' 
                         : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
-                    <cat.icon className={`h-5 w-5 flex-shrink-0 transition-colors ${category === cat.id ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-500'}`} />
-                    <span className="truncate">{cat.name}</span>
+                    <cat.icon className={`h-6 w-6 flex-shrink-0 transition-transform group-hover:scale-110 ${cat.color}`} />
+                    <span>{cat.name}</span>
                   </button>
                 ))}
               </nav>
@@ -227,12 +227,10 @@ export default function ProblemSet() {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex flex-col">
-                              <span className="text-base font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                              <span className="text-lg font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                 {problem.title}
                               </span>
-                              <span className="text-xs text-slate-500 dark:text-slate-500 capitalize mt-1">
-                                {problem.category?.replace('_', ' ')}
-                              </span>
+                             
                             </div>
                           </td>
                           <td className="px-6 py-4">
