@@ -1,92 +1,190 @@
-import React, { useState } from 'react';
-import { Lock, Mail, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Placeholder for Phase 4.2 (Auth)
-    alert(`Login attempted for: ${email}\n(Backend Auth not connected yet as per instructions)`);
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white dark:bg-cses-darker p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800">
-        <div className="text-center">
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Welcome back
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            Sign in to your account to continue practicing
-          </p>
+    <>
+      <style>{`
+        html, body, #root {
+          height: 100%;
+          margin: 0;
+        }
+
+        * {
+          box-sizing: border-box;
+          font-family: "Segoe UI", sans-serif;
+        }
+
+        .login-page {
+          height: 100vh;
+          width: 100vw;
+          background: linear-gradient(135deg, #6a5cff, #8f7bff);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .login-card {
+          width: 900px;
+          height: 450px;
+          background: #fff;
+          border-radius: 12px;
+          display: flex;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* LEFT */
+        .login-left {
+          flex: 1;
+          padding: 60px;
+          color: white;
+          background: linear-gradient(135deg, #6a5cff, #ff8fb1);
+          position: relative;
+        }
+
+        .login-left h1 {
+          font-size: 32px;
+          margin-bottom: 20px;
+        }
+
+        .login-left p {
+          font-size: 14px;
+          line-height: 1.6;
+          opacity: 0.9;
+        }
+
+        /* RIGHT */
+        .login-right {
+          flex: 1;
+          padding: 60px 50px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .login-right h2 {
+          text-align: center;
+          margin-bottom: 30px;
+          font-size: 20px;
+          color: #7b6cff;
+          letter-spacing: 1px;
+        }
+
+        .input-group {
+          margin-bottom: 15px;
+          position: relative;
+        }
+
+        .input-group input {
+          width: 100%;
+          padding: 12px 40px 12px 15px;
+          border-radius: 20px;
+          border: none;
+          background: #f1f1ff;
+          outline: none;
+          font-size: 14px;
+          color: #000;
+        }
+
+        .input-group input::placeholder {
+          color: #666;
+        }
+
+        .input-group input:focus {
+          box-shadow: 0 0 0 2px rgba(106, 92, 255, 0.4);
+        }
+
+        .eye-btn {
+          position: absolute;
+          right: 14px;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          font-size: 16px;
+          color: #666;
+          user-select: none;
+        }
+
+        .login-options {
+          display: flex;
+          justify-content: space-between;
+          font-size: 12px;
+          margin: 10px 0 25px;
+          color: #777;
+        }
+
+        .login-options label {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .forgot {
+          cursor: pointer;
+        }
+
+        .login-btn {
+          padding: 12px;
+          border: none;
+          border-radius: 20px;
+          background: linear-gradient(135deg, #6a5cff, #ff8fb1);
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(106, 92, 255, 0.4);
+        }
+      `}</style>
+
+      <div className="login-page">
+        <div className="login-card">
+          {/* Left */}
+          <div className="login-left">
+            <h1>Welcome to Tharka School</h1>
+            <p>
+              Master Problems with Tharka School
+            </p>
+          </div>
+
+          {/* Right */}
+          <div className="login-right">
+            <h2>USER LOGIN</h2>
+
+            <div className="input-group">
+              <input type="text" placeholder="Username" />
+            </div>
+
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+              />
+              <span
+                className="eye-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "👁" : "⌣  "}
+              </span>
+            </div>
+
+            <div className="login-options">
+              <label>
+                <input type="checkbox" />
+                Remember
+              </label>
+              <span className="forgot">Forgot password?</span>
+            </div>
+
+            <button className="login-btn">LOGIN</button>
+          </div>
         </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email address
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white sm:text-sm"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white sm:text-sm"
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="group relative flex w-full justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-          >
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-              <ArrowRight className="h-4 w-4 text-blue-300 group-hover:text-blue-200" />
-            </span>
-            Sign in
-          </button>
-
-          <div className="text-center text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Don't have an account? </span>
-            <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
-              Sign up
-            </Link>
-          </div>
-        </form>
       </div>
-    </div>
+    </>
   );
 }
