@@ -5,12 +5,13 @@ const path = require('path');
 const { exec, spawn } = require('child_process');
 const util = require('util');
 const Problem = require('../models/Problem');
+const { isAuthenticated } = require('../middleware/auth');
 
 // Promisify exec to use with await
 const execPromise = util.promisify(exec);
 
 // Endpoint: Submit Solution
-router.post('/', async (req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
   const { problemId, code, mode } = req.body;
   
   if (!code) return res.status(400).json({ error: "No code provided" });

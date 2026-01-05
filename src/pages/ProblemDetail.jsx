@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { 
   Play, 
   Loader2, 
@@ -20,7 +21,8 @@ import {
   ChevronUp,
   ChevronDown,
   Copy,
-  Check
+  Check,
+  Lock
 } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import config from '../config';
@@ -51,6 +53,9 @@ const CopyButton = ({ text }) => {
 
 export default function ProblemDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, csrfToken } = useAuth();
+  
   const [problem, setProblem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -104,6 +109,11 @@ int main() {
   }, [id, defaultCode]);
 
   const handleRun = async () => {
+    if (!user) {
+        navigate('/login', { state: { from: `/problems/${id}` } });
+        return;
+    }
+
     setRunning(true);
     setResult(null);
     setConsoleOpen(true);
@@ -112,9 +122,19 @@ int main() {
     try {
       const res = await fetch(`${config.API_URL}/submit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'CSRF-Token': csrfToken
+        },
+        credentials: 'include', // Important for Cookie
         body: JSON.stringify({ problemId: id, code, mode: 'run' })
       });
+      
+      if (res.status === 401) {
+          navigate('/login');
+          return;
+      }
+      
       const data = await res.json();
       setResult(data);
     } catch {
@@ -125,6 +145,11 @@ int main() {
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+        navigate('/login', { state: { from: `/problems/${id}` } });
+        return;
+    }
+
     setSubmitting(true);
     setResult(null);
     setConsoleOpen(true); // Open console to show result
@@ -133,9 +158,19 @@ int main() {
     try {
       const res = await fetch(`${config.API_URL}/submit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json', 
+            'CSRF-Token': csrfToken
+        },
+        credentials: 'include',
         body: JSON.stringify({ problemId: id, code })
       });
+
+      if (res.status === 401) {
+          navigate('/login');
+          return;
+      }
+
       const data = await res.json();
       setResult(data);
     } catch {
@@ -191,21 +226,32 @@ int main() {
          </div>
 
          <div className="flex items-center gap-2">
-            <button 
-                onClick={handleRun}
-                disabled={running || submitting}
-                className="flex items-center gap-2 px-4 py-1.5 bg-[#333] hover:bg-[#444] text-gray-300 rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                {running ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />} Run
-            </button>
-            <button 
-                onClick={handleSubmit}
-                disabled={submitting || running}
-                className="flex items-center gap-2 px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Code2 className="h-3 w-3" />}
-                Submit
-            </button>
+            {!user ? (
+                 <button 
+                    onClick={() => navigate('/login', { state: { from: `/problems/${id}` } })}
+                    className="flex items-center gap-2 px-4 py-1.5 bg-[#333] hover:bg-[#444] text-gray-300 rounded text-sm font-medium transition-colors"
+                >
+                    <Lock className="h-3 w-3" /> Login to Solve
+                </button>
+            ) : (
+                <>
+                    <button 
+                        onClick={handleRun}
+                        disabled={running || submitting}
+                        className="flex items-center gap-2 px-4 py-1.5 bg-[#333] hover:bg-[#444] text-gray-300 rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {running ? <Loader2 className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />} Run
+                    </button>
+                    <button 
+                        onClick={handleSubmit}
+                        disabled={submitting || running}
+                        className="flex items-center gap-2 px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {submitting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Code2 className="h-3 w-3" />}
+                        Submit
+                    </button>
+                </>
+            )}
          </div>
       </div>
 

@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import ProblemSet from './pages/ProblemSet';
 import ProblemDetail from './pages/ProblemDetail';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -15,6 +17,14 @@ function App() {
           <Route path="problems" element={<ProblemSet />} />
           <Route path="problems/:id" element={<ProblemDetail />} />
           <Route path="login" element={<Login />} />
+          <Route 
+            path="profile" 
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } 
+          />
           {/* Fallback for now */}
           <Route path="*" element={<Home />} />
         </Route>
